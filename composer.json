@@ -1,0 +1,33 @@
+{
+    "name": "larite/framework",
+    "description": "A lightweight PHP MVC framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kashif Sohail",
+            "email": "amkashif171@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "symfony/console": "^7.2",
+        "composer/installers": "^2.3",
+        "filp/whoops": "^2.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lumite\\": "src/Lumite/"
+        },
+        "files": [
+            "src/Lumite/Utils/helpers.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}
