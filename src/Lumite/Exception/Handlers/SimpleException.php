@@ -12,9 +12,6 @@ class SimpleException extends Exception
     protected int $line;
     protected string $trace;
 
-    /**
-     * @param Throwable $e
-     */
     public function __construct(Throwable $e)
     {
         $this->shortMessage = $e->getMessage();
@@ -22,22 +19,37 @@ class SimpleException extends Exception
         $this->line = $e->getLine();
         $this->trace = $e->getTraceAsString();
 
-        // Call parent constructor with original message, code and previous exception
         parent::__construct($this->shortMessage, (int) $e->getCode(), $e);
     }
 
     /**
-     * @return string
+     * Format the file path to remove vendor/root prefix
+     * and keep only "Namespace/Path/File.php"
      */
+    protected function formatPath(string $path): string
+    {
+        // Normalize slashes for cross-platform
+        $path = str_replace('\\', '/', $path);
+
+        // Look for "Lumite/" or "App/" or other namespaces
+        $namespaces = ['Lumite/', 'App/'];
+        foreach ($namespaces as $ns) {
+            if (($pos = strpos($path, $ns)) !== false) {
+                return substr($path, $pos);
+            }
+        }
+
+        // Default: return original
+        return $path;
+    }
+
     public function __toString(): string
     {
         return sprintf(
             "Exception: %s\nFile: %s\nLine: %d\n",
             $this->getMessage(),
-            $this->getFile(),
+            $this->formatPath($this->getFile()),
             $this->getLine()
         );
     }
-
 }
-

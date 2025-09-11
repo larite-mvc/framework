@@ -3,7 +3,7 @@
 namespace Lumite\Utils;
 
 use Lumite\Support\IsRoute;
-use Lumite\Support\Routing\RouteNotFount;
+use Lumite\Support\Routing\RouteNotFound;
 
 class RouteExist
 {
@@ -18,7 +18,7 @@ class RouteExist
         }
 
         if (!$route) {
-            RouteNotFount::check();
+            RouteNotFound::check();
         }
     }
 }

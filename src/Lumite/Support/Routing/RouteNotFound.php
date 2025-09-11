@@ -6,9 +6,12 @@ use Lumite\Exception\Handlers\RouteNotFoundException;
 use function abort;
 use function config;
 
-class RouteNotFount
+class RouteNotFound
 {
 
+    /**
+     * @throws RouteNotFoundException
+     */
     public static function check() {
 
         if (config("app.app_env") != "production") {
