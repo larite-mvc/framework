@@ -139,14 +139,27 @@ class Auth
      */
     public function verify($credentials,$output): bool
     {
-        $verified = [];
-        foreach ($credentials as $field=> $credential){
-            $verified[] = password_verify($credential, $output->$field );
+        // Identify password field from provided credentials
+        $passwordField = null;
+        foreach ($credentials as $field => $value) {
+            if (stripos($field, 'password') !== false) {
+                $passwordField = $field;
+                break;
+            }
         }
-        if(in_array(true,$verified)){
-            return true;
+
+        if ($passwordField === null) {
+            return false;
         }
-        return false;
+
+        $passwordPlain = $credentials[$passwordField];
+        $passwordHash = $output->$passwordField ?? null;
+
+        if (!is_string($passwordHash) || $passwordHash === '') {
+            return false;
+        }
+
+        return password_verify($passwordPlain, $passwordHash) === true;
     }
 
     /**

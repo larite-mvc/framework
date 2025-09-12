@@ -52,7 +52,7 @@ class RouteExecutor
                 return $method;
             }
         }
-        
+
         return $incomingMethod;
     }
 
@@ -68,7 +68,12 @@ class RouteExecutor
      */
     private static function handleStaticRoute(array $handler, string $routeKey, string $incomingMethod, array $routeMiddleware): bool
     {
-        if (!static::runMiddlewareChecks($handler['middleware'] ?? [], $routeMiddleware[$routeKey] ?? [])) {
+        $mwResult = static::runMiddlewareChecks($handler['middleware'] ?? [], $routeMiddleware[$routeKey] ?? []);
+        if ($mwResult !== true) {
+            // If middleware returned a response-like value, emit/echo if stringable, else assume it already handled output
+            if (is_string($mwResult)) {
+                echo $mwResult;
+            }
             return true;
         }
 
@@ -101,7 +106,11 @@ class RouteExecutor
             if (preg_match($route['regex'], $currentAction, $matches)) {
                 array_shift($matches);
 
-                if (!static::runMiddlewareChecks($route['middleware'] ?? [])) {
+                $mwResult = static::runMiddlewareChecks($route['middleware'] ?? []);
+                if ($mwResult !== true) {
+                    if (is_string($mwResult)) {
+                        echo $mwResult;
+                    }
                     return true;
                 }
 
@@ -124,11 +133,14 @@ class RouteExecutor
      * @return bool
      * @throws MiddlewareException
      */
-    private static function runMiddlewareChecks(array|string $handlerMiddleware = [], array $routeMiddleware = []): bool
+    private static function runMiddlewareChecks(array|string $handlerMiddleware = [], array $routeMiddleware = [])
     {
-
-        return static::getMiddleware($handlerMiddleware) === true
-            && static::getMiddleware($routeMiddleware) === true;
+        $res1 = static::getMiddleware($handlerMiddleware);
+        if ($res1 !== true) {
+            return $res1;
+        }
+        $res2 = static::getMiddleware($routeMiddleware);
+        return $res2;
     }
 
     /**

@@ -23,7 +23,8 @@ class Redirect
      */
     public function back()
     {
-        $this->url = $_SERVER['HTTP_REFERER'] ?? '/';
+        $referer = $_SERVER['HTTP_REFERER'] ?? '/';
+        $this->url = $this->sanitizeAndValidateUrl($referer);
         return $this;
     }
 
@@ -64,12 +65,16 @@ class Redirect
      */
     public function backWithErrors($data){
         Session::push('errors',$data);
-        return header('Location: ' . $_SERVER['HTTP_REFERER']);
+        $referer = $_SERVER['HTTP_REFERER'] ?? '/';
+        header('Location: ' . $this->sanitizeAndValidateUrl($referer));
+        exit;
     }
 
     public function backWith($key,$message){
         Session::flash($key, $message);
-        return header('Location: ' . $_SERVER['HTTP_REFERER']);
+        $referer = $_SERVER['HTTP_REFERER'] ?? '/';
+        header('Location: ' . $this->sanitizeAndValidateUrl($referer));
+        exit;
     }
 
     /**
@@ -82,6 +87,25 @@ class Redirect
     {
         Session::flash($type, $message);
         $this->go();
+    }
+
+    private function sanitizeAndValidateUrl(string $url): string
+    {
+        // Only allow same-origin redirects; otherwise go to '/'
+        $target = filter_var($url, FILTER_SANITIZE_URL);
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
+        $origin = $scheme . '://' . $host;
+
+        if (str_starts_with($target, '/')) {
+            return $target;
+        }
+
+        if (str_starts_with($target, $origin)) {
+            return $target;
+        }
+
+        return '/';
     }
 
 }

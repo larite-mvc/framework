@@ -43,11 +43,12 @@ trait Middleware
 
         $result = $next($request);
 
-        if ($result === false || $result === null) {
-            return false;
+        // If middleware returned a Redirect/Response or any non-true value, bubble it up
+        if ($result === true) {
+            return true;
         }
 
-        return true;
+        return $result;
     }
 
     /**

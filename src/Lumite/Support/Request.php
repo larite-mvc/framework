@@ -128,6 +128,29 @@ class Request
         return new Session();
     }
 
+    public function method(): string
+    {
+        return $_SERVER['REQUEST_METHOD'] ?? 'GET';
+    }
+
+    public function isMethod(string $method): bool
+    {
+        return strtoupper($this->method()) === strtoupper($method);
+    }
+
+    public function url(): string
+    {
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        return $protocol . '://' . $host . $uri;
+    }
+
+    public function path(): string
+    {
+        return parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    }
+
     public function __get($key)
     {
         if ($this->has($key)) {

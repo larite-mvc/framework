@@ -18,11 +18,17 @@ trait CsrfToken
         // 1. Token from POST
         $postToken = $_POST['csrf_token'] ?? null;
 
-        // 2. Token from headers (manual extraction for full compatibility)
+        // 2. Token from headers (support common aliases)
         $headerToken = null;
-        foreach ($_SERVER as $key => $value) {
-            if (strtolower($key) === 'http_x_csrf_token') {
-                $headerToken = $value;
+        $candidates = [
+            'HTTP_X_CSRF_TOKEN',
+            'HTTP_X_XSRF_TOKEN',
+            'X_CSRF_TOKEN',
+            'X_XSRF_TOKEN',
+        ];
+        foreach ($candidates as $header) {
+            if (isset($_SERVER[$header]) && $_SERVER[$header]) {
+                $headerToken = $_SERVER[$header];
                 break;
             }
         }
@@ -46,7 +52,10 @@ trait CsrfToken
      */
     public static function verify($token, $requestedToken): bool
     {
-        return $token === $requestedToken;
+        if (!is_string($token) || !is_string($requestedToken)) {
+            return false;
+        }
+        return hash_equals($token, $requestedToken);
     }
 
     /**
