@@ -118,8 +118,8 @@ class Generator
         ];
 
         foreach ($views as $view => $template) {
-            $viewPath = ROOT_PATH . "/views/$view.php";
-            $templatePath = __DIR__ . "/../Templates/Views/$template.php";
+            $viewPath = ROOT_PATH . "/views/$view.blade.php";
+            $templatePath = __DIR__ . "/../Templates/Views/$template.blade.php";
 
             if (file_exists($viewPath) && $view !== 'partials/header') {
                 $errors[] = ucfirst(basename($view)) . ' view already exists';

@@ -37,7 +37,7 @@ class Session
      * @param $array
      * @return mixed
      */
-    public static function push($key,$array){
+    public static function push($key, $array) {
         if(!isset($_SESSION[$key])){
             $_SESSION[$key] = [];
         }else{
@@ -52,10 +52,11 @@ class Session
      * @param null $key
      * @return mixed
      */
-    public static function get($key=null){
-        if(is_null($key)){
+    public static function get($key = null)
+    {
+        if(is_null($key)) {
           return $_SESSION;
-        }else {
+        } else {
             if (isset($_SESSION[$key]['flash'])) {
                 $session = $_SESSION[$key]['flash'];
                 unset($_SESSION[$key]['flash']);

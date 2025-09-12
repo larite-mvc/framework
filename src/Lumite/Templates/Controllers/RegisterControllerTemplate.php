@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Lumite\Support\Auth;
 use Lumite\Support\Request;
-use Lumite\Support\Validation\Validator;
+use Lumite\Support\Facades\Validator;
 
 class controllername extends Controller
 {

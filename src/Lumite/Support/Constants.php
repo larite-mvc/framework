@@ -32,4 +32,8 @@ class Constants
     ];
 
     const WHERE_BETWEENS = ['whereBetween', 'orWhereBetween', 'whereNotBetween', 'orWhereNotBetween'];
+    
+    const BLADE_VIEW = ROOT_PATH . '/views';
+    
+    const STORAGE_VIEW = ROOT_PATH . '/storage/views';
 }

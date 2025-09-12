@@ -18,7 +18,7 @@ use Lumite\Support\Redirect;
 use Lumite\Support\Session;
 use Lumite\Support\Form;
 use Lumite\Support\Str;
-use Lumite\Support\Validation\Validator;
+use Lumite\Support\Facades\Validator;
 use Symfony\Component\VarDumper\VarDumper;
 
 
@@ -514,12 +514,17 @@ if(!function_exists('bcrypt')) {
     }
 }
 
-if(!function_exists('session')) {
-    function session()
+if (!function_exists('session')) {
+    function session($key = null)
     {
+        if ($key !== null) {
+            return Session::get($key);
+        }
+
         return new Session();
     }
 }
+
 
 if(!function_exists('getTable')) {
     function getTable($get_class)
@@ -819,8 +824,18 @@ if (!function_exists('e')) {
      */
     function e($value)
     {
+        if (is_null($value)) {
+            return '';
+        }
+
+        // Convert scalars (int, float, bool) to string safely
+        if (is_scalar($value)) {
+            $value = (string) $value;
+        }
+
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     }
+
 }
 
 if (!function_exists('raw')) {

@@ -1,5 +1,6 @@
-<?php include_html('partials/header.php');?>
+@extends('layouts.app')
 
+@section('content')
 <!-- Home Card Section -->
 <div class="hero-section">
     <div class="hero-content text-center">
@@ -10,6 +11,4 @@
         </div>
     </div>
 </div>
-
-
-<?php include_html('partials/footer.php');?>
+@endsection

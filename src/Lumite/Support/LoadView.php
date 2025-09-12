@@ -24,19 +24,22 @@ class LoadView
         extract($originalData);  /*convert array key as variable here*/
         extract($paginateData); /*convert array key as variable here*/
 
-        if ($loadHtml) {
-            /**
-             * Loading view for pdf etc
-             */
-            ob_start();
-            require_once(ROOT_PATH . "/views/" . makeView($view) . ".php");
-            $res = ob_get_contents();
-            ob_end_clean();
+        $engine = new \Lumite\Support\Blade\Engine(ROOT_PATH . '/views', ROOT_PATH . '/storage/views');
 
-            return $res;
+        // Build variables as previously extracted into scope
+        $vars = [];
+        if (is_array($originalData)) {
+            $vars = array_merge($vars, $originalData);
+        }
+        if (is_array($paginateData)) {
+            $vars = array_merge($vars, $paginateData);
         }
 
-        return require_once(ROOT_PATH . "/views/" . makeView($view) . ".php");
+        if ($loadHtml) {
+            return $engine->render($view, $vars, true);
+        }
+
+        return $engine->render($view, $vars);
     }
 
 
@@ -92,6 +95,8 @@ class LoadView
 
         return array_merge($result, $response);
     }
+
+    // resolveBladeOrPhp removed; rendering is delegated to Engine
 
     /**
      * @param object $data

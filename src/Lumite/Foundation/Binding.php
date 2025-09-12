@@ -2,6 +2,8 @@
 
 namespace Lumite\Foundation;
 
+use Lumite\Support\Blade\Compiler;
+use Lumite\Support\Constants;
 use Lumite\Support\DBQuery;
 use Lumite\Support\Mailer;
 use Lumite\Support\Routing\Router;
@@ -25,6 +27,11 @@ class Binding
 
         // Bind validation facade
         app()->singleton('validator', new Validation());
+
+        // Bind blade facade
+        app()->singleton('blade', function () {
+            return new Compiler(Constants::BLADE_VIEW, Constants::STORAGE_VIEW);
+        });
 
     }
 }

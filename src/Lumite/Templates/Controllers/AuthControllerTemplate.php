@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Lumite\Support\Auth;
 use Lumite\Support\Request;
-use Lumite\Support\Validation\Validator;
+use Lumite\Support\Facades\Validator;
 
 class controllername extends Controller
 {

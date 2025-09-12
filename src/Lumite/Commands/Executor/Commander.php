@@ -12,6 +12,7 @@ use Lumite\Commands\MakeCommandCommand;
 use Lumite\Commands\MakeMiddlewareCommand;
 use Lumite\Commands\MakeSeederCommand;
 use Lumite\Commands\MakeServiceProviderCommand;
+use Lumite\Commands\ClearViewCacheCommand;
 use Lumite\Commands\MigrationCommand;
 use Lumite\Commands\RollbackMigrationCommand;
 use Lumite\Commands\RouteListCommand;
@@ -51,6 +52,7 @@ class Commander
             MakeMiddlewareCommand::class,
             MakeCommandCommand::class,
             MakeServiceProviderCommand::class,
+            ClearViewCacheCommand::class,
         ];
 
         foreach ($coreCommands as $command) {
